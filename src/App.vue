@@ -1,9 +1,9 @@
-<template>
-  <v-app>
-    <div id="app">
-    <search-bar></search-bar>
-    <content-calender></content-calender>
-  </div>
+<template> 
+  <v-app id="app">
+      <div>
+      <search-bar></search-bar>
+      <content-calender></content-calender>
+    </div>
   </v-app>
 </template>
 
@@ -20,11 +20,12 @@ export default{
 </script>
 
 <style lang="scss">
-#app {
-  width: 108.412rem;
-  height: 102.793rem;
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+#app{
+    margin: 0 auto;
+    background-color: $subtle-white;
+}
+.v-application--wrap{
+  width: 144.1rem;
+  height: 76.8rem;
 }
 </style>
