@@ -1,145 +1,244 @@
 <template>
-    <div class="container">
-        <div class="nav">
-            <date-picker></date-picker>
-            <div class="nav-toggle">
-                <button class="nav-toggle-monthly">Monthly</button>
-                <button class="nav-toggle-weekly">Weekly</button>
-            </div>
-            <div class="nav-container">
-                <div class="btn btn-left" @click="dayShifter(start)"><img src="../assets/Stroke.svg"></div>
-                <div class="nav-days">
-                    <div class="display-days" v-for="day in days" :key="day.value" :class="{'text-color-to-red':checkToday(day)}" @click="dayShifter(day)">{{ day.format('dddd M[/]D')}}</div>
-                </div>
-                <div class="btn btn-right" @click="dayShifter(end)"><img src="../assets/Stroke.svg"></div>
-            </div>
-        </div>
-        <div class="cards-container">
-            <the-card v-for="post in todayPost" :key="todayPost.indexOf(post)" :imageUrl="post.image" :cardText="post.text"
-                :cardTime="post.time" :cardDate="post.date">
-            </the-card>
-        </div>
-    </div>
-</template>
+  <div class="container">
+    <div class="nav">
 
+
+      <div class="nav-container-one">
+        <date-picker :start="days[0]" :end="days[4]" @leftButtonEvent="addFiveDays()"
+          @rightButtonEvent="subtractFiveDays()" @updateDates="updateCalenderDates"></date-picker>
+        <div class="nav-toggle">
+          <button class="nav-toggle-monthly">Monthly</button>
+          <button class="nav-toggle-weekly">Weekly</button>
+        </div>
+        <div class="nav-today" @click="toToday()">Today</div>
+      </div>
+
+
+      <div class="nav-container-two">
+        <div class="btn btn-left" @click="subtractFiveDays()">
+          <img src="../assets/left-arrow.svg" />
+        </div>
+        <div class="nav-days">
+          <div class="display-days" v-for="day in days" :key="day.value"
+            :class="{'text-color-to-red': checkToday(day)}" @click="showPosts(day)">
+            {{ day.format("dddd M[/]D") }}
+          </div>
+        </div>
+        <div class="btn btn-right" @click="addFiveDays()">
+          <img src="../assets/left-arrow.svg" />
+        </div>
+      </div>
+    </div>
+
+
+    <div class="cards-container">
+      <the-card v-for="post in getPosts" :key="getPosts.indexOf(post)" :imageUrl="post.image" :cardText="post.text"
+        :cardTime="post.time" :cardDate="post.date">
+      </the-card>
+    </div>
+  </div>
+</template>
 
 <script>
 import DatePicker from "./DatePicker.vue";
 import TheCard from "./ui/TheCard.vue";
 import jsonData from "./output.json";
-import moment from 'moment';
+import moment from "moment";
 export default {
-    components: {
-        TheCard,
-        DatePicker
+  components: {
+    TheCard,
+    DatePicker,
+  },
+  data() {
+    return {
+      posts: jsonData,
+      days: [],
+      isPosted: false,
+      day: moment(),
+    };
+  },
+  computed: {
+    getPosts() {
+      return this.getPostsSetter(this.day)
     },
-    data() {
-        return {
-            posts: jsonData,
-            days: [],
-            today: moment(),
-            isPosted:false,
-        }
+  },
+  beforeMount() {
+    this.getDays(this.day);
+  },
+  methods: {
+    start(day) {
+      return moment(day).subtract(2, "days");
     },
-    computed: {
-        start(){
-            return moment(this.today).subtract(2, 'days')
-        },
-        end(){
-            return moment(this.today).add(2, 'days')
-        },
-        todayPost() {
-            return this.posts.filter((item) => item.date == moment(this.today).format('YYYY-MM-DD'))
-        }
+    end(day) {
+      return moment(day).add(2, "days");
     },
-    mounted() {
-        this.getDays(this.start, this.end);
+    checkToday(day) {
+      if (moment().format("YYYY-MM-DD") == moment(day).format("YYYY-MM-DD")) {
+        return true;
+      } else {
+        return false;
+      }
     },
-    methods: {
-        checkToday(day){
-            if (moment(this.today).isSame(moment(day))){
-                return true;
-            }
-            else{
-                return false;
-            }
-        },
-        dayShifter(day){
-            this.today = day;
-            this.days=[]
-            this.getDays(this.start, this.end)
-        },
-        getDays(startDate, endDate) {
-            while (startDate <= endDate) {
-                this.days.push(startDate)
-                startDate = startDate.clone().add(1, 'days')
-            }
-        },
+    getPostsSetter(day) {
+      return this.posts.filter(
+        (item) => item.date == moment(day.format("YYYY-MM-DD")).format("YYYY-MM-DD")
+      );
     },
-}
-
+    showPosts(day) {
+      this.day = day;
+    },
+    getDays(day) {
+      let startDate = this.start(day)
+      let endDate = this.end(day)
+      this.days = []
+      while (startDate <= endDate) {
+        this.days.push(startDate);
+        startDate = startDate.clone().add(1, "days");
+      }
+    },
+    addFiveDays() {
+      this.getDays(this.days[2].add(5,"days"));
+      this.showPosts(this.days[2]);
+    },
+    subtractFiveDays() {
+      this.getDays(this.days[2].subtract(5, "days"))
+      this.showPosts(this.days[2]);
+    },
+    toToday(){
+      this.day = moment()
+      this.getDays(moment())
+      this.showPosts(moment())
+    },
+    updateCalenderDates(date){
+      let payload = moment(date).add(2, "days")
+      this.getDays(payload)
+      this.showPosts(moment(payload))
+    }
+  },
+};
 </script>
-
 
 <style lang="scss" scoped>
 .container {
-    margin-left: 20rem;
-    height: 102.793rem;
-    width: 108.412rem;
+  margin: 0 auto;
+  height: 102.793rem;
+  width: 108.412rem;
+  overflow-y: hidden;
+  background-color: $white;
 }
 
-.nav-container {
-    display: flex;
-    align-items: center;
-    width: 104rem;
-    height: 4.4rem;
-    margin-bottom: 0.899rem;
+.nav-container-one {
+  width: 103.967rem;
+  height: 4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1.363rem 3.083rem 4.203rem 1.362rem;
+}
 
+.nav-toggle {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 1.2rem;
+  line-height: 2.4rem;
+  height: 3.2rem;
+  border: 1px solid $light-grey-two;
+  border-radius: 0.8rem;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  &-monthly {
+    height: 3.2rem;
+    width: 6.1rem;
+    border-right: 0.05rem solid $light-grey-two;
+  }
+  &-weekly {
+    height: 3.2rem;
+    width: 6.1rem;
+    border-left: 0.05rem solid $light-grey-two;
+  }
+}
+
+.nav-container-two {
+  display: flex;
+  align-items: center;
+  width: 104rem;
+  height: 4.4rem;
+  margin-bottom: 0.899rem;
+  margin-left:1.622rem;
+}
+
+.nav-today {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  padding: 0.4rem 2.4rem;
+  width: 8.7rem;
+  height: 3.2rem;
+  background: $black-two;
+  border-radius: 0.8rem;
+  font-weight: 600;
+  font-size: 1.2rem;
+  line-height: 2.4rem;
+  color: $white;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
 }
 
 .nav-days {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 87.188em;
-    height: 4.4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 87.188em;
+  height: 4.4rem;
+  cursor: pointer;
 }
+
 
 .display-days {
-    height: 2.4rem;
-    font-family: 'Poppins';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 1.2rem;
-    line-height: 2.4rem;
-    text-transform: uppercase;
-    color: #C4C4C4;
+  height: 2.4rem;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 1.2rem;
+  line-height: 2.4rem;
+  text-transform: uppercase;
+  color: #c4c4c4;
 }
 
-.btn{
-    height: 3.583rem;
-    width: 3.583rem;
-    box-shadow: 0px 0.689023px 2.75609px rgba(0, 0, 0, 0.25);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    &-right{
-        margin-left: 4.806rem;
-        transform: rotate(180deg);
-    }
-    &-left{
-        margin-right: 4.806rem;
-    }
+.btn {
+  height: 3.583rem;
+  width: 3.583rem;
+  box-shadow: 0px 0.689023px 2.75609px rgba(0, 0, 0, 0.25);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &-right {
+    margin-left: 4.806rem;
+    transform: rotate(180deg);
+  }
+
+  &-left {
+    margin-right: 4.806rem;
+  }
 }
 
 .cards-container {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-row-gap: 0.601rem;
-    grid-column-gap:1.231rem ;
+  display: grid;
+  margin-left: 2.943rem;
+  margin-right: 2.312rem;
+  grid-template-columns: repeat(5, 1fr);
+  grid-row-gap: 0.601rem;
+  grid-column-gap: 0.6rem;
 }
-.text-color-to-red{
-    color:$red
+
+.text-color-to-red {
+  color: $red;
 }
 </style>
