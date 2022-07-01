@@ -109,10 +109,11 @@ export default {
       this.getDays(moment())
       this.showPosts(moment())
     },
-    updateCalenderDates() {
-      let payload = this.days[2]
+    updateCalenderDates(date) {
+      let payload = moment(date).add(2, "days")
       this.getDays(payload)
       this.showPosts(moment(payload))
+      // console.log(this.days);
     }
   },
 };
