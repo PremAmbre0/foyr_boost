@@ -4,8 +4,8 @@
 
 
       <div class="nav-container-one">
-        <date-picker :start="days[0]" :end="days[4]" @leftButtonEvent="addFiveDays()"
-          @rightButtonEvent="subtractFiveDays()" @updateDates="updateCalenderDates"></date-picker>
+        <date-picker @leftButtonEvent="addFiveDays()"
+          @rightButtonEvent="subtractFiveDays()" @updateDates="updateCalenderDates" :days="days"></date-picker>
         <div class="nav-toggle">
           <button class="nav-toggle-monthly">Monthly</button>
           <button class="nav-toggle-weekly">Weekly</button>

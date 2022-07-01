@@ -11,7 +11,7 @@
           <v-btn v-model="dates" v-bind="attrs" v-on="on" plain icon x-small><img src="../assets/down-arrow.svg" />
           </v-btn>
         </template>
-        <v-date-picker v-model="dates" range @change="$emit('updateDates',dates[0])">
+        <v-date-picker v-model="dates" range @change="$emit('updateDates', dates[0])">
         </v-date-picker>
       </v-menu>
     </div>
@@ -25,28 +25,36 @@
 <script>
 import moment from 'moment'
 export default {
-  emits: ['leftButtonEvent', 'rightButtonEvent','updateDates'],
+  emits: ['leftButtonEvent', 'rightButtonEvent', 'updateDates'],
   props: {
-    start: {
+    days: {
       required: true,
-    },
-    end: {
-      required: true,
+      type: Array
     }
   },
   data() {
     return {
       dates: [this.start.format('YYYY-MM-DD'), this.end.format('YYYY-MM-DD')],
       menu: false,
-      modal: false, 
+      modal: false,
     }
   },
   computed: {
+    start() {
+      return this.days[0]
+    },
+    end() {
+      return this.days[this.days.length - 1]
+    },
     displayDateText() {
-      return `${moment(this.dates[0]).format("MMMM DD")} - ${moment(this.dates[1]).format("MMMM DD")} ,${moment().format("YYYY")}`
+      return `${moment(this.start).format("MMMM DD")} - ${moment(this.end).format("MMMM DD")} ,${moment().format("YYYY")}`
     },
   },
   mounted() {
+    console.log(this.start, this.end, this.days);
+  },
+  methods: {
+
   },
 }
 </script>
@@ -81,13 +89,13 @@ export default {
   flex-grow: 0;
 
   &-left {
-    margin-right:2.5rem;
+    margin-right: 2.5rem;
 
     transform: rotate(180deg);
   }
 
   &-right {
-    margin-left:2.5rem;
+    margin-left: 2.5rem;
     transform: rotate(0deg);
   }
 }
