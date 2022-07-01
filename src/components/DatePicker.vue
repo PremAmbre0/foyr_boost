@@ -11,7 +11,7 @@
           <v-btn v-model="dates" v-bind="attrs" v-on="on" plain icon x-small><img src="../assets/down-arrow.svg" />
           </v-btn>
         </template>
-        <v-date-picker v-model="dates" range @change="$emit('updateDates', dates[0])">
+        <v-date-picker v-model="dates" range @change="$emit('updateDates')">
         </v-date-picker>
       </v-menu>
     </div>
@@ -29,12 +29,11 @@ export default {
   props: {
     days: {
       required: true,
-      type: Array
     }
   },
   data() {
     return {
-      dates: [this.start.format('YYYY-MM-DD'), this.end.format('YYYY-MM-DD')],
+      dates: [this.days[0].format('YYYY-MM-DD'), this.days[this.days.length -1].format('YYYY-MM-DD')],
       menu: false,
       modal: false,
     }
@@ -51,7 +50,7 @@ export default {
     },
   },
   mounted() {
-    console.log(this.start, this.end, this.days);
+    console.log(this.start, this.end, this.days, this.dates);
   },
   methods: {
 
