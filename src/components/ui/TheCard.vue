@@ -11,6 +11,7 @@
     ></div>
     <div class="card-text">{{ cardText }}</div>
     <div class="card-time">{{ cardTime }}</div>
+    <div>{{cardDate}}</div>
   </div>
 </template>
 
@@ -39,6 +40,9 @@ export default {
       let time = moment(`${this.cardDate} ${this.cardTime}`);
       return this.now > time;
     },
+  },
+  mounted() {
+    console.log(this.cardDate)
   },
 };
 </script>
