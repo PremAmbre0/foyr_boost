@@ -4,8 +4,8 @@
 
 
       <div class="nav-container-one">
-        <date-picker @leftButtonEvent="addFiveDays()" @rightButtonEvent="subtractFiveDays()"
-          @updateDates="updateCalenderDates" :days="days"></date-picker>
+        <date-picker @leftButtonEvent="addFiveDays()"
+          @rightButtonEvent="subtractFiveDays()" @updateDates="updateCalenderDates" :days="days"></date-picker>
         <div class="nav-toggle">
           <button class="nav-toggle-monthly">Monthly</button>
           <button class="nav-toggle-weekly">Weekly</button>
@@ -20,7 +20,7 @@
         </div>
         <div class="nav-days">
           <div class="display-days" v-for="day in days" :key="day.value"
-            :class="{ 'text-color-to-red': checkToday(day) }" @click="showPosts(day)">
+            :class="{'text-color-to-red': checkToday(day)}" @click="showPosts(day)">
             {{ day.format("dddd M[/]D") }}
           </div>
         </div>
@@ -32,12 +32,12 @@
 
 
     <div class="cards-week-container">
-      <div class="cards-days-container" v-for="day in days" :key="day.value">
-          <the-card v-for="post in postsOfTheWeek" :key="postsOfTheWeek.indexOf(post)" :imageUrl="post.image" :cardText="post.text"
-            :cardTime="post.time" :cardDate="post.date">
-          </the-card>
-        </div>
+      <div class="cards-days-container" v-for="postsOfTheSelectedDays in days" :key="postsOfTheSelectedDays.value">
+      <the-card v-for="post in getPosts(postsOfTheSelectedDays)" :key="post.value" :imageUrl="post.image" :cardText="post.text"
+        :cardTime="post.time" :cardDate="post.date">
+      </the-card>
       </div>
+    </div>
   </div>
 </template>
 
@@ -55,13 +55,12 @@ export default {
     return {
       posts: jsonData,
       days: [],
-      postsOfTheWeek: [],
+      postsOfTheday:[],
       day: moment(),
     };
   },
   beforeMount() {
     this.getDays(this.day);
-    this.getPostOfTheWeek(this.postsOfTheWeek)
   },
   methods: {
     start(day) {
@@ -77,12 +76,10 @@ export default {
         return false;
       }
     },
-    getPostOfTheWeek(weeklyPosts) {
-      this.days.forEach((day) => {
-        let postsOfTheday = this.posts.filter(
-          (item) => item.date == moment(day.format("YYYY-MM-DD")))
-        weeklyPosts.push(postsOfTheday)
-      })
+    getPosts(day) {
+      return this.posts.filter(
+        (item) => item.date == moment(day.format("YYYY-MM-DD")).format("YYYY-MM-DD")
+      );
     },
     showPosts(day) {
       this.day = day;
@@ -97,14 +94,14 @@ export default {
       }
     },
     addFiveDays() {
-      this.getDays(this.days[2].add(5, "days"));
+      this.getDays(this.days[2].add(5,"days"));
       this.showPosts(this.days[2]);
     },
     subtractFiveDays() {
       this.getDays(this.days[2].subtract(5, "days"))
       this.showPosts(this.days[2]);
     },
-    toToday() {
+    toToday(){
       this.day = moment()
       this.getDays(moment())
       this.showPosts(moment())
@@ -113,7 +110,6 @@ export default {
       let payload = moment(date).add(2, "days")
       this.getDays(payload)
       this.showPosts(moment(payload))
-      // console.log(this.days);
     }
   },
 };
@@ -148,13 +144,11 @@ export default {
   flex: none;
   order: 0;
   flex-grow: 0;
-
   &-monthly {
     height: 3.2rem;
     width: 6.1rem;
     border-right: 0.05rem solid $light-grey-two;
   }
-
   &-weekly {
     height: 3.2rem;
     width: 6.1rem;
@@ -168,7 +162,7 @@ export default {
   width: 104rem;
   height: 4.4rem;
   margin-bottom: 0.899rem;
-  margin-left: 1.622rem;
+  margin-left:1.622rem;
 }
 
 .nav-today {
@@ -240,11 +234,10 @@ export default {
   grid-row-gap: 0.601rem;
   grid-column-gap: 0.6rem;
 }
-
-.cards-days-container {
-  height: auto;
+.cards-days-container{
+  height:auto;
   display: grid;
-  grid-row-gap: 0.601rem
+  grid-row-gap:0.601rem
 }
 
 .text-color-to-red {
