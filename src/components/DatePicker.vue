@@ -1,7 +1,7 @@
 <template>
   <div class="conatiner d-flex">
     <v-btn class=" btn btn-left" plain :close-on-content-click="this.dates.length == 2 ? true : false" icon x-small
-      @click="$emit('leftButtonEvent')"><img src="../assets/orange-arrow.svg" />
+      @click="addDays"><img src="../assets/orange-arrow.svg" />
     </v-btn>
     <div class="d-flex">
       <v-menu v-model="menu" :close-on-content-click="datePickerPopupControl" :nudge-right="40"
@@ -11,12 +11,12 @@
           <v-btn v-model="dates" v-bind="attrs" v-on="on" plain icon x-small><img src="../assets/down-arrow.svg" />
           </v-btn>
         </template>
-        <v-date-picker v-model="dates" range @change="updateCalenderDates(dates[0])">
+        <v-date-picker v-model="dates" range @change="updateCalenderDates" header-color="#ED737C"
+      color="#E9BEB3">
         </v-date-picker>
       </v-menu>
     </div>
-    <v-btn class=" btn btn-right" plain icon x-small @click="$emit('rightButtonEvent'); 'menu=false'"><img
-        src="../assets/orange-arrow.svg" />
+    <v-btn class=" btn btn-right" plain icon x-small @click="subtractDays"><img src="../assets/orange-arrow.svg" />
     </v-btn>
   </div>
 </template>
@@ -24,9 +24,8 @@
 
 <script>
 import moment from 'moment'
+import { mapActions ,mapGetters } from 'vuex';
 export default {
-  emits: ['leftButtonEvent', 'rightButtonEvent', 'updateDates'],
-  inject:['days','updateCalenderDates(date)'],
   data() {
     return {
       menu: false,
@@ -51,15 +50,29 @@ export default {
   },
   computed: {
     displayDateText() {
-      return `${moment(this.days[0]).format("MMMM DD")} - ${moment(this.days[4]).format("MMMM DD")} ,${moment().format("YYYY")}`
-    },
+      return `${moment(this.daysSelected[0]).format("MMMM DD")} - ${moment(this.daysSelected[4]).format("MMMM DD")} ,${moment().format("YYYY")}`
+    },    
+    ...mapGetters(['daysSelected'])
   },
   mounted() {
-    this.setDates()
+    this.setDates() 
   },
   methods: {
+    ...mapActions(['getDaysAction']),
     setDates() {
-      this.dates = [this.days[0].format('YYYY-MM-DD'), this.days[4].format('YYYY-MM-DD')]
+      this.dates = [moment(this.daysSelected[0]).format('YYYY-MM-DD'), moment(this.daysSelected[4]).format('YYYY-MM-DD')]
+    },
+    addDays() {
+      let payload = moment(this.daysSelected[2]).add(5, 'days')
+      this.getDaysAction(payload)
+    },
+    subtractDays() {
+      let payload = moment(this.daysSelected[2]).subtract(5, 'days')
+      this.getDaysAction(payload)
+    },
+    updateCalenderDates(){
+      let payload = moment(this.dates[0]).add(2, 'days')
+      this.getDaysAction(payload)
     }
   },
 }

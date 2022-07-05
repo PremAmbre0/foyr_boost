@@ -2,7 +2,7 @@
     <div>
         <div>
             <div class="nav-container-two">
-                <div class="btn btn-left" @click="addDays"  >
+                <div class="btn btn-left" @click="subtractDays"  >
                     <img src="../assets/left-arrow.svg" />
                 </div>
                 <div class="nav-days">
@@ -11,12 +11,11 @@
                         {{ day.format("dddd M[/]D") }}
                     </div>
                 </div>
-                <div class="btn btn-right">
+                <div class="btn btn-right" @click="addDays">
                     <img src="../assets/left-arrow.svg" />
                 </div>
             </div>
         </div>
-        {{daysSelected}}
         <div class="cards-week-container">
             <div class="cards-days-container" v-for="postsOfTheSelectedDays in daysSelected"
                 :key="postsOfTheSelectedDays.value">
@@ -53,7 +52,10 @@ export default {
         ...mapActions(['getDaysAction']),
         addDays(){
             let payload = moment(this.daysSelected[2]).add(5,'days')
-            console.log(payload,moment(this.daysSelected[2]).add(5,'days'))
+            this.getDaysAction(payload)
+        },
+        subtractDays(){
+            let payload = moment(this.daysSelected[2]).subtract(5,'days')
             this.getDaysAction(payload)
         },
         getPosts(day) {
@@ -89,7 +91,6 @@ export default {
      align-items: center;
      width: 87.188em;
      height: 4.4rem;
-     cursor: pointer;
  }
  
  

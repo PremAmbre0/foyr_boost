@@ -1,6 +1,6 @@
 <template>
   <div class="nav-container-one">
-    <date-picker @leftButtonEvent="addFiveDays()" @rightButtonEvent="subtractFiveDays()"></date-picker>
+    <date-picker></date-picker>
     <div class="nav-toggle">
       <button class="nav-toggle-monthly">Monthly</button>
       <button class="nav-toggle-weekly">Weekly</button>
@@ -15,7 +15,7 @@ import DatePicker from "./DatePicker.vue";
 export default 
 {
   components: {
-    DatePicker
+    DatePicker,
   },
 }
 

@@ -14,10 +14,8 @@ const getters = {
 
 const mutations = {
     getDays(state,payload) {
-        console.log(payload)
         let startDate = moment(payload.toISOString()).subtract(2, "days")
         let endDate = moment(payload.toISOString()).add(2, "days")
-        console.log(startDate, endDate)
         state.days=[]
         while (startDate <= endDate) {
             state.days.push(startDate);

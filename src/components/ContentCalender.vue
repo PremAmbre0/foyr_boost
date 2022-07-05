@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="nav">
-      <!-- <content-calender-main-navigation></content-calender-main-navigation> -->
+      <content-calender-main-navigation></content-calender-main-navigation>
       <content-calender-weekly-navigation></content-calender-weekly-navigation>
     </div>
   </div>
@@ -10,12 +10,12 @@
 <script>
 import moment from "moment";
 import { mapGetters , mapActions} from "vuex";
-// import ContentCalenderMainNavigation from "./ContentCalenderMainNavigation.vue";
+import ContentCalenderMainNavigation from "./ContentCalenderMainNavigation.vue";
 import ContentCalenderWeeklyNavigation from "./ContentCalenderWeeklyNavigation.vue"
 
 export default {
   components: {
-    // ContentCalenderMainNavigation,
+    ContentCalenderMainNavigation,
     ContentCalenderWeeklyNavigation
   },
 
@@ -23,7 +23,6 @@ export default {
     ...mapGetters(['daysSelected'])
   },
   mounted() {
-     console.log(moment());   
       this.getDaysAction(moment())
   },
   methods: {
