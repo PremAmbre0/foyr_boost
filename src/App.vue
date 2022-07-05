@@ -1,18 +1,18 @@
 <template> 
   <v-app id="app">
       <div>
-      <search-bar></search-bar>
+      <the-header></the-header>
       <content-calender></content-calender>
     </div>
   </v-app>
 </template>
 
 <script>
-import SearchBar from "./components/SearchBar.vue";
+import TheHeader from "./components/TheHeader.vue";
 import ContentCalender from "./components/ContentCalender.vue";
 export default{
   components:{
-    SearchBar,
+    TheHeader,
     ContentCalender
 }
 }

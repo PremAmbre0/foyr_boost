@@ -11,7 +11,7 @@
           <v-btn v-model="dates" v-bind="attrs" v-on="on" plain icon x-small><img src="../assets/down-arrow.svg" />
           </v-btn>
         </template>
-        <v-date-picker v-model="dates" range @change="$emit('updateDates', dates[0])">
+        <v-date-picker v-model="dates" range @change="updateCalenderDates(dates[0])">
         </v-date-picker>
       </v-menu>
     </div>
@@ -26,11 +26,7 @@
 import moment from 'moment'
 export default {
   emits: ['leftButtonEvent', 'rightButtonEvent', 'updateDates'],
-  props: {
-    days: {
-      required: true,
-    }
-  },
+  inject:['days','updateCalenderDates(date)'],
   data() {
     return {
       menu: false,
