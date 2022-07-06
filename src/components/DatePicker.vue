@@ -58,21 +58,21 @@ export default {
     this.setDates() 
   },
   methods: {
-    ...mapActions(['getDaysAction']),
+    ...mapActions(['setDaysAction']),
     setDates() {
       this.dates = [moment(this.daysSelected[0]).format('YYYY-MM-DD'), moment(this.daysSelected[4]).format('YYYY-MM-DD')]
     },
     addDays() {
       let payload = moment(this.daysSelected[2]).add(5, 'days')
-      this.getDaysAction(payload)
+      this.setDaysAction(payload)
     },
     subtractDays() {
       let payload = moment(this.daysSelected[2]).subtract(5, 'days')
-      this.getDaysAction(payload)
+      this.setDaysAction(payload)
     },
     updateCalenderDates(){
       let payload = moment(this.dates[0]).add(2, 'days')
-      this.getDaysAction(payload)
+      this.setDaysAction(payload)
     }
   },
 }

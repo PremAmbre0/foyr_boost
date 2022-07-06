@@ -33,10 +33,10 @@ export default {
     ...mapGetters(['daysSelected'])
   },
   mounted() {
-    this.getDaysAction(moment())
+    this.setDaysAction(moment())
   },
   methods: {
-    ...mapActions(['getDaysAction']),
+    ...mapActions(['setDaysAction']),
     setToMonthlyNavigation() {
       this.currentTabComponent = 'ContentCalenderMonthlyNavigation'
     },

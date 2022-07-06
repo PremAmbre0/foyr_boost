@@ -13,7 +13,7 @@ const getters = {
 }
 
 const mutations = {
-    getDays(state,payload) {
+    setDays(state,payload) {
         let startDate = moment(payload.toISOString()).subtract(2, "days")
         let endDate = moment(payload.toISOString()).add(2, "days")
         state.days=[]
@@ -25,8 +25,8 @@ const mutations = {
 }
 
 const actions = {
-    getDaysAction(context,payload) {
-        context.commit('getDays',payload)
+    setDaysAction(context,payload) {
+        context.commit('setDays',payload)
     },
 }
 

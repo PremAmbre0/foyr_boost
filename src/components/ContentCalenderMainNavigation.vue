@@ -1,5 +1,5 @@
 <template>
-  <div class="nav-container-one">
+  <div class="nav-container">
     <date-picker></date-picker>
     <div class="nav-toggle">
       <button class="nav-toggle-monthly" @click="$emit('changeToMonthlyNavigation')">Monthly</button>
@@ -20,9 +20,9 @@ export default
     DatePicker,
   },
   methods: {
-    ...mapActions(['getDaysAction']),
+    ...mapActions(['setDaysAction']),
     toToday(){
-      this.getDaysAction(moment())
+      this.setDaysAction(moment())
     }
   },
 }
@@ -30,7 +30,7 @@ export default
 </script>
 
 <style lang="scss" scoped>
-.nav-container-one {
+.nav-container {
   width: 103.967rem;
   height: 4rem;
   display: flex;
