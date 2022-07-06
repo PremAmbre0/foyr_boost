@@ -19,14 +19,13 @@
 <style lang="scss" scoped>
 .searchbar {
   font-family: "Poppins", sans-serif;
-
   margin: 2.426rem auto 2.911rem auto;
   height: 6.4rem;
   width: 134.4rem;
   background: $white;
-  box-shadow: 0px 0px 2px rgba(40, 41, 61, 0.04),
-    0px 4px 8px rgba(96, 97, 112, 0.16);
-  border-radius: 8px;
+  box-shadow: 0 0 0.2rem rgba(40, 41, 61, 0.04),
+    0 0.4rem 0.8rem rgba(96, 97, 112, 0.16);
+  border-radius: 0.8rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
