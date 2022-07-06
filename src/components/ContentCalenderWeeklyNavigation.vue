@@ -2,7 +2,7 @@
     <div>
         <div>
             <div class="nav-container-two">
-                <div class="btn btn-left" @click="subtractDays"  >
+                <div class="btn btn-left" @click="subtractDays">
                     <img src="../assets/left-arrow.svg" />
                 </div>
                 <div class="nav-days">
@@ -17,11 +17,12 @@
             </div>
         </div>
         <div class="cards-week-container">
-            <div class="cards-days-container" v-for="postsOfTheSelectedDays in daysSelected"
-                :key="postsOfTheSelectedDays.value">
-                <instagram-posts-card v-for="post in getPosts(postsOfTheSelectedDays)" :key="post.value"
-                    :imageUrl="post.image" :cardText="post.text" :cardTime="post.time" :cardDate="post.date">
+            <div class="cards-days-container" v-for="day in daysSelected"
+                :key="day.value">
+                <instagram-posts-card v-for="post in getPosts(day)" :key="post.value"
+                    :imageUrl="post.image" :cardText="post.text" :cardTime="post.time" :cardDate="post.date" :post="post">
                 </instagram-posts-card>
+                <EmptyInstagramPostsCard v-for="i in maximumRows(day)" :key='i'></EmptyInstagramPostsCard>
             </div>
         </div>
 
@@ -31,37 +32,45 @@
 <script>
 import jsonData from "./output.json"
 import InstagramPostsCard from "./InstagramPostsCard.vue";
+import EmptyInstagramPostsCard from "./EmptyInstagramPostsCard.vue";
 import moment from "moment";
-import { mapGetters , mapActions} from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
     components: {
-        InstagramPostsCard
+        InstagramPostsCard,
+        EmptyInstagramPostsCard
     },
     data() {
         return {
             posts: jsonData,
         }
     },
-    computed:{
+    computed: {
         ...mapGetters(['daysSelected'])
     },
-    mounted() {
-    },  
     methods: {
         ...mapActions(['getDaysAction']),
-        addDays(){
-            let payload = moment(this.daysSelected[2]).add(5,'days')
+        addDays() {
+            let payload = moment(this.daysSelected[2]).add(5, 'days')
             this.getDaysAction(payload)
         },
-        subtractDays(){
-            let payload = moment(this.daysSelected[2]).subtract(5,'days')
+        subtractDays() {
+            let payload = moment(this.daysSelected[2]).subtract(5, 'days')
             this.getDaysAction(payload)
         },
         getPosts(day) {
             return this.posts.filter(
                 (item) => item.date == moment(day.format("YYYY-MM-DD")).format("YYYY-MM-DD")
             );
+        },
+        maximumRows(day){
+            let rows=[]
+            for(let day of this.daysSelected){
+                rows.push(this.getPosts(day).length)
+            }
+            let maximumRow =  Math.max.apply(Math, rows)
+            return maximumRow-this.getPosts(day).length
         },
         checkToday(day) {
             if (moment().format("YYYY-MM-DD") == moment(day).format("YYYY-MM-DD")) {
@@ -126,16 +135,20 @@ export default {
  }
  
  .cards-week-container {
+     height: 76.703rem;
      display: grid;
+     padding-right:1rem;
      margin-left: 2.943rem;
      margin-right: 2.312rem;
      grid-template-columns: repeat(5, 1fr);
      grid-row-gap: 0.601rem;
      grid-column-gap: 0.6rem;
+     overflow-y: auto;
+     overflow-x: hidden;
  }
  
  .cards-days-container {
-     height: auto;
+     height: 25.568rem;
      display: grid;
      grid-row-gap: 0.601rem
  }

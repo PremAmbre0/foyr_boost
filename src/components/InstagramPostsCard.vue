@@ -1,17 +1,11 @@
 <template>
-  <div class="card">
-    <div
-      class="card-status-badge"
-      :style="{ background: `${isPosted ? '#7BC82F' : '#FFD328'}` }"
-    ></div>
-    <div class="card-status-text">{{ isPosted ? "Posted" : "Upcoming" }}</div>
-    <div
-      class="card-image"
-      :style="{ 'background-image': `url(${imageUrl})` }"
-    ></div>
-    <div class="card-text">{{ cardText }}</div>
-    <div class="card-time">{{ cardTime }}</div>
-  </div>
+    <div class="card">
+      <div class="card-status-badge" :style="{ background: `${isPosted ? '#7BC82F' : '#FFD328'}` }"></div>
+      <div class="card-status-text">{{ isPosted ? "Posted" : "Upcoming" }}</div>
+      <div class="card-image" :style="{ 'background-image': `url(${imageUrl})` }"></div>
+      <div class="card-text">{{ cardText }}</div>
+      <div class="card-time">{{ cardTime }}</div>
+    </div>
 </template>
 
 <script>
@@ -30,6 +24,9 @@ export default {
     cardDate: {
       type: String,
     },
+    post:{
+      type:Object
+    }
   },
   computed: {
     now() {
@@ -40,6 +37,9 @@ export default {
       return this.now > time;
     },
   },
+  // mounted() {
+  //     console.log(this.post)
+  //   },
 };
 </script>
 
@@ -80,13 +80,11 @@ export default {
   }
 
   &-image {
-    background: linear-gradient(
-        180deg,
+    background: linear-gradient(180deg,
         rgba(0, 0, 0, 0.5) 9.88%,
-        rgba(0, 0, 0, 0) 100%
-      ),
+        rgba(0, 0, 0, 0) 100%),
       $light-peach-two;
-    // background-image: url("https://picsum.photos/seed/picsum/200/300");
+
     background-size: 19rem 19rem;
     width: 19rem;
     height: 19rem;
@@ -120,9 +118,5 @@ export default {
     align-self: flex-start;
   }
 }
-.empty-card {
-  width: 20.263rem;
-  height: 25.568rem;
-  background-color: $light-grey-three;
-}
+
 </style>

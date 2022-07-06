@@ -2,8 +2,8 @@
   <div class="nav-container-one">
     <date-picker></date-picker>
     <div class="nav-toggle">
-      <button class="nav-toggle-monthly">Monthly</button>
-      <button class="nav-toggle-weekly">Weekly</button>
+      <button class="nav-toggle-monthly" @click="$emit('changeToMonthlyNavigation')">Monthly</button>
+      <button class="nav-toggle-weekly" @click="$emit('changeToWeeklyNavigation')">Weekly</button>
     </div>
     <div class="nav-today" @click="toToday()">Today</div>
   </div>
@@ -11,11 +11,19 @@
 
 <script>
 import DatePicker from "./DatePicker.vue";
+import { mapActions } from "vuex";
+import moment from "moment";
 
 export default 
 {
   components: {
     DatePicker,
+  },
+  methods: {
+    ...mapActions(['getDaysAction']),
+    toToday(){
+      this.getDaysAction(moment())
+    }
   },
 }
 
@@ -33,15 +41,15 @@ export default
 
 .nav-toggle {
   font-style: normal;
-  font-weight: 600;
+  font-weight: 900;
   font-size: 1.2rem;
   line-height: 2.4rem;
   height: 3.2rem;
   border: 1px solid $light-grey-two;
   border-radius: 0.8rem;
-  flex: none;
-  order: 0;
-  flex-grow: 0;
+  // flex: none;
+  // order: 0;
+  // flex-grow: 0;
 
   &-monthly {
     height: 3.2rem;

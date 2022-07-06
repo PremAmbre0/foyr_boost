@@ -1,32 +1,48 @@
 <template>
   <div class="container">
     <div class="nav">
-      <content-calender-main-navigation></content-calender-main-navigation>
-      <content-calender-weekly-navigation></content-calender-weekly-navigation>
+      <content-calender-main-navigation @changeToMonthlyNavigation="setToMonthlyNavigation"
+        @changeToWeeklyNavigation="setToWeeklyNavigation"></content-calender-main-navigation>
+      <keep-alive>
+        <component v-bind:is="currentTabComponent"></component>
+      </keep-alive>
     </div>
   </div>
 </template>
 
 <script>
 import moment from "moment";
-import { mapGetters , mapActions} from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import ContentCalenderMainNavigation from "./ContentCalenderMainNavigation.vue";
 import ContentCalenderWeeklyNavigation from "./ContentCalenderWeeklyNavigation.vue"
+import ContentCalenderMonthlyNavigation from "./ContentCalenderMonthlyNavigation.vue";
 
 export default {
   components: {
     ContentCalenderMainNavigation,
-    ContentCalenderWeeklyNavigation
+    ContentCalenderWeeklyNavigation,
+    ContentCalenderMonthlyNavigation
+  },
+  data() {
+    return {
+      currentTabComponent: 'ContentCalenderWeeklyNavigation'
+    }
   },
 
-  computed:{
+  computed: {
     ...mapGetters(['daysSelected'])
   },
   mounted() {
-      this.getDaysAction(moment())
+    this.getDaysAction(moment())
   },
   methods: {
     ...mapActions(['getDaysAction']),
+    setToMonthlyNavigation() {
+      this.currentTabComponent = 'ContentCalenderMonthlyNavigation'
+    },
+    setToWeeklyNavigation() {
+      this.currentTabComponent = 'ContentCalenderWeeklyNavigation'
+    }
   },
 }
 </script>
